@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pruebas API Ecommerce</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+    .response-box {
+      background-color: #f3f4f6;
+      border-radius: 8px;
+      padding: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen p-6">
+  <div class="max-w-4xl mx-auto">
+    <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Pruebas API Ecommerce</h1>
+
+    <!-- Área para mostrar el token -->
+    <div class="mb-6">
+      <h2 class="text-xl font-semibold text-gray-700">Token JWT</h2>
+      <p id="token" class="text-sm text-gray-600">No hay token. Inicia sesión para obtener uno.</p>
+    </div>
+
+    <!-- Formulario: Registrar usuario -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Registrar Usuario</h2>
+      <form id="registerForm" class="space-y-4">
+        <input type="text" id="regFirstName" placeholder="Nombre" class="w-full p-2 border rounded" required>
+        <input type="text" id="regLastName" placeholder="Apellido" class="w-full p-2 border rounded" required>
+        <input type="email" id="regEmail" placeholder="Email" class="w-full p-2 border rounded" required>
+        <input type="number" id="regAge" placeholder="Edad" class="w-full p-2 border rounded" required>
+        <input type="password" id="regPassword" placeholder="Contraseña" class="w-full p-2 border rounded" required>
+        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Registrar</button>
+      </form>
+    </div>
+
+    <!-- Formulario: Login -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Iniciar Sesión</h2>
+      <form id="loginForm" class="space-y-4">
+        <input type="email" id="loginEmail" placeholder="Email" class="w-full p-2 border rounded" required>
+        <input type="password" id="loginPassword" placeholder="Contraseña" class="w-full p-2 border rounded" required>
+        <button type="submit" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Iniciar Sesión</button>
+      </form>
+    </div>
+
+    <!-- Botón: Obtener usuario actual -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Obtener Usuario Actual (/current)</h2>
+      <button id="currentBtn" class="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700">Obtener</button>
+    </div>
+
+    <!-- Botón: Obtener todos los usuarios -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Obtener Todos los Usuarios</h2>
+      <button id="getUsersBtn" class="w-full bg-indigo-600 text-white p-2 rounded hover:bg-indigo-700">Obtener</button>
+    </div>
+
+    <!-- Formulario: Obtener usuario por ID -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Obtener Usuario por ID</h2>
+      <form id="getUserByIdForm" class="space-y-4">
+        <input type="text" id="getUserId" placeholder="ID del usuario" class="w-full p-2 border rounded" required>
+        <button type="submit" class="w-full bg-teal-600 text-white p-2 rounded hover:bg-teal-700">Obtener</button>
+      </form>
+    </div>
+
+    <!-- Formulario: Actualizar usuario -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Actualizar Usuario</h2>
+      <form id="updateUserForm" class="space-y-4">
+        <input type="text" id="updateUserId" placeholder="ID del usuario" class="w-full p-2 border rounded" required>
+        <input type="text" id="updateFirstName" placeholder="Nombre (opcional)" class="w-full p-2 border rounded">
+        <input type="text" id="updateLastName" placeholder="Apellido (opcional)" class="w-full p-2 border rounded">
+        <input type="email" id="updateEmail" placeholder="Email (opcional)" class="w-full p-2 border rounded">
+        <input type="number" id="updateAge" placeholder="Edad (opcional)" class="w-full p-2 border rounded">
+        <input type="password" id="updatePassword" placeholder="Contraseña (opcional)" class="w-full p-2 border rounded">
+        <button type="submit" class="w-full bg-yellow-600 text-white p-2 rounded hover:bg-yellow-700">Actualizar</button>
+      </form>
+    </div>
+
+    <!-- Formulario: Eliminar usuario -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
+      <h2 class="text-xl font-semibold mb-4">Eliminar Usuario</h2>
+      <form id="deleteUserForm" class="space-y-4">
+        <input type="text" id="deleteUserId" placeholder="ID del usuario" class="w-full p-2 border rounded" required>
+        <button type="submit" class="w-full bg-red-600 text-white p-2 rounded hover:bg-red-700">Eliminar</button>
+      </form>
+    </div>
+
+    <!-- Área para mostrar respuestas -->
+    <div class="bg-white p-6 rounded-lg shadow-md">
+      <h2 class="text-xl font-semibold mb-4">Respuesta de la API</h2>
+      <pre id="response" class="response-box text-sm text-gray-800"></pre>
+    </div>
+  </div>
+
+  <script>
+    const baseUrl = 'http://localhost:3000/api/sessions';
+    const responseEl = document.getElementById('response');
+
+    // Mostrar el token almacenado
+    const updateTokenDisplay = () => {
+      const token = localStorage.getItem('token');
+      document.getElementById('token').textContent = token || 'No hay token. Inicia sesión para obtener uno.';
+    };
+    updateTokenDisplay();
+
+    // Función para mostrar respuestas
+    const showResponse = (data, error = false) => {
+      responseEl.textContent = JSON.stringify(data, null, 2);
+      responseEl.classList.remove(error ? 'text-green-600' : 'text-red-600');
+      responseEl.classList.add(error ? 'text-red-600' : 'text-green-600');
+    };
+
+    // Registrar usuario
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        first_name: document.getElementById('regFirstName').value,
+        last_name: document.getElementById('regLastName').value,
+        email: document.getElementById('regEmail').value,
+        age: parseInt(document.getElementById('regAge').value),
+        password: document.getElementById('regPassword').value,
+      };
+      try {
+        const res = await fetch(`${baseUrl}/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+
+    // Iniciar sesión
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        email: document.getElementById('loginEmail').value,
+        password: document.getElementById('loginPassword').value,
+      };
+      try {
+        const res = await fetch(`${baseUrl}/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        if (res.ok && data.token) {
+          localStorage.setItem('token', data.token);
+          updateTokenDisplay();
+        }
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+
+    // Obtener usuario actual
+    document.getElementById('currentBtn').addEventListener('click', async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/current`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+
+    // Obtener todos los usuarios
+    document.getElementById('getUsersBtn').addEventListener('click', async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/users`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+
+    // Obtener usuario por ID
+    document.getElementById('getUserByIdForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('getUserId').value;
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/users/${id}`, {
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+
+    // Actualizar usuario
+    document.getElementById('updateUserForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('updateUserId').value;
+      const payload = {};
+      if (document.getElementById('updateFirstName').value) payload.first_name = document.getElementById('updateFirstName').value;
+      if (document.getElementById('updateLastName').value) payload.last_name = document.getElementById('updateLastName').value;
+      if (document.getElementById('updateEmail').value) payload.email = document.getElementById('updateEmail').value;
+      if (document.getElementById('updateAge').value) payload.age = parseInt(document.getElementById('updateAge').value);
+      if (document.getElementById('updatePassword').value) payload.password = document.getElementById('updatePassword').value;
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/users/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+
+    // Eliminar usuario
+    document.getElementById('deleteUserForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('deleteUserId').value;
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/users/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  </script>
+</body>
+</html>
