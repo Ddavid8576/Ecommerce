@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pruebas API Ecommerce</title>
+  <title>Ecommerce API - Entrega Final</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -16,111 +16,267 @@
       padding: 16px;
       max-height: 300px;
       overflow-y: auto;
+      white-space: pre-wrap;
+      font-family: 'Courier New', monospace;
+    }
+    .section-hidden {
+      display: none;
+    }
+    .navbar {
+      background: linear-gradient(to right, #4b6cb7, #182848);
+    }
+    .card {
+      transition: transform 0.2s;
+    }
+    .card:hover {
+      transform: translateY(-4px);
     }
   </style>
 </head>
-<body class="bg-gray-100 min-h-screen p-6">
-  <div class="max-w-4xl mx-auto">
-    <h1 class="text-3xl font-bold text-center mb-8 text-gray-800">Pruebas API Ecommerce</h1>
+<body class="bg-gray-100 min-h-screen">
+  <!-- Navbar -->
+  <nav class="navbar text-white p-4 shadow-lg">
+    <div class="max-w-6xl mx-auto flex justify-between items-center">
+      <h1 class="text-2xl font-bold">Ecommerce API</h1>
+      <div>
+        <span id="userRole" class="mr-4">Rol: Ninguno</span>
+        <button id="logoutBtn" class="bg-red-600 px-4 py-2 rounded-lg hover:bg-red-700">Cerrar Sesión</button>
+      </div>
+    </div>
+  </nav>
 
+  <div class="max-w-6xl mx-auto p-6">
     <!-- Área para mostrar el token -->
-    <div class="mb-6">
+    <div class="mb-8 text-center">
       <h2 class="text-xl font-semibold text-gray-700">Token JWT</h2>
-      <p id="token" class="text-sm text-gray-600">No hay token. Inicia sesión para obtener uno.</p>
+      <p id="token" class="text-sm text-gray-600 mt-2">No hay token. Inicia sesión para obtener uno.</p>
     </div>
 
     <!-- Formulario: Registrar usuario -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">Registrar Usuario</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8 card">
+      <h2 class="text-xl font-semibold mb-4 text-gray-800">Registrar Usuario</h2>
       <form id="registerForm" class="space-y-4">
-        <input type="text" id="regFirstName" placeholder="Nombre" class="w-full p-2 border rounded" required>
-        <input type="text" id="regLastName" placeholder="Apellido" class="w-full p-2 border rounded" required>
-        <input type="email" id="regEmail" placeholder="Email" class="w-full p-2 border rounded" required>
-        <input type="number" id="regAge" placeholder="Edad" class="w-full p-2 border rounded" required>
-        <input type="password" id="regPassword" placeholder="Contraseña" class="w-full p-2 border rounded" required>
-        <button type="submit" class="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700">Registrar</button>
+        <input type="text" id="regFirstName" placeholder="Nombre" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <input type="text" id="regLastName" placeholder="Apellido" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <input type="email" id="regEmail" placeholder="Email" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <input type="number" id="regAge" placeholder="Edad" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <input type="password" id="regPassword" placeholder="Contraseña" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        <select id="regRole" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+          <option value="user">Usuario</option>
+          <option value="admin">Administrador</option>
+        </select>
+        <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition">Registrar</button>
       </form>
     </div>
 
     <!-- Formulario: Login -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">Iniciar Sesión</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8 card">
+      <h2 class="text-xl font-semibold mb-4 text-gray-800">Iniciar Sesión</h2>
       <form id="loginForm" class="space-y-4">
-        <input type="email" id="loginEmail" placeholder="Email" class="w-full p-2 border rounded" required>
-        <input type="password" id="loginPassword" placeholder="Contraseña" class="w-full p-2 border rounded" required>
-        <button type="submit" class="w-full bg-green-600 text-white p-2 rounded hover:bg-green-700">Iniciar Sesión</button>
+        <input type="email" id="loginEmail" placeholder="Email" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+        <input type="password" id="loginPassword" placeholder="Contraseña" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+        <button type="submit" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition">Iniciar Sesión</button>
       </form>
     </div>
 
-    <!-- Botón: Obtener usuario actual -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">Obtener Usuario Actual (/current)</h2>
-      <button id="currentBtn" class="w-full bg-purple-600 text-white p-2 rounded hover:bg-purple-700">Obtener</button>
-    </div>
-
-    <!-- Botón: Obtener todos los usuarios -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">Obtener Todos los Usuarios</h2>
-      <button id="getUsersBtn" class="w-full bg-indigo-600 text-white p-2 rounded hover:bg-indigo-700">Obtener</button>
-    </div>
-
-    <!-- Formulario: Obtener usuario por ID -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">Obtener Usuario por ID</h2>
-      <form id="getUserByIdForm" class="space-y-4">
-        <input type="text" id="getUserId" placeholder="ID del usuario" class="w-full p-2 border rounded" required>
-        <button type="submit" class="w-full bg-teal-600 text-white p-2 rounded hover:bg-teal-700">Obtener</button>
+    <!-- Formulario: Solicitar restablecimiento de contraseña -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8 card">
+      <h2 class="text-xl font-semibold mb-4 text-gray-800">Solicitar Restablecimiento de Contraseña</h2>
+      <form id="requestResetForm" class="space-y-4">
+        <input type="email" id="resetEmail" placeholder="Email" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+        <button type="submit" class="w-full bg-yellow-600 text-white p-3 rounded-lg hover:bg-yellow-700 transition">Enviar Correo</button>
       </form>
     </div>
 
-    <!-- Formulario: Actualizar usuario -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">Actualizar Usuario</h2>
-      <form id="updateUserForm" class="space-y-4">
-        <input type="text" id="updateUserId" placeholder="ID del usuario" class="w-full p-2 border rounded" required>
-        <input type="text" id="updateFirstName" placeholder="Nombre (opcional)" class="w-full p-2 border rounded">
-        <input type="text" id="updateLastName" placeholder="Apellido (opcional)" class="w-full p-2 border rounded">
-        <input type="email" id="updateEmail" placeholder="Email (opcional)" class="w-full p-2 border rounded">
-        <input type="number" id="updateAge" placeholder="Edad (opcional)" class="w-full p-2 border rounded">
-        <input type="password" id="updatePassword" placeholder="Contraseña (opcional)" class="w-full p-2 border rounded">
-        <button type="submit" class="w-full bg-yellow-600 text-white p-2 rounded hover:bg-yellow-700">Actualizar</button>
+    <!-- Formulario: Restablecer contraseña -->
+    <div class="bg-white p-6 rounded-lg shadow-md mb-8 card">
+      <h2 class="text-xl font-semibold mb-4 text-gray-800">Restablecer Contraseña</h2>
+      <form id="resetPasswordForm" class="space-y-4">
+        <input type="text" id="resetToken" placeholder="Token recibido" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+        <input type="password" id="newPassword" placeholder="Nueva contraseña" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+        <button type="submit" class="w-full bg-yellow-600 text-white p-3 rounded-lg hover:bg-yellow-700 transition">Restablecer</button>
       </form>
     </div>
 
-    <!-- Formulario: Eliminar usuario -->
-    <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-      <h2 class="text-xl font-semibold mb-4">Eliminar Usuario</h2>
-      <form id="deleteUserForm" class="space-y-4">
-        <input type="text" id="deleteUserId" placeholder="ID del usuario" class="w-full p-2 border rounded" required>
-        <button type="submit" class="w-full bg-red-600 text-white p-2 rounded hover:bg-red-700">Eliminar</button>
-      </form>
+    <!-- Sección: Gestión de usuarios (todos los roles) -->
+    <div id="userSection" class="mb-8">
+      <!-- Obtener usuario actual -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Obtener Usuario Actual (/current)</h2>
+        <button id="currentBtn" class="w-full bg-purple-600 text-white p-3 rounded-lg hover:bg-purple-700 transition">Obtener</button>
+      </div>
+
+      <!-- Obtener todos los usuarios -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Obtener Todos los Usuarios</h2>
+        <button id="getUsersBtn" class="w-full bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 transition">Obtener</button>
+      </div>
+
+      <!-- Obtener usuario por ID -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Obtener Usuario por ID</h2>
+        <form id="getUserByIdForm" class="space-y-4">
+          <input type="text" id="getUserId" placeholder="ID del usuario" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-teal-500" required>
+          <button type="submit" class="w-full bg-teal-600 text-white p-3 rounded-lg hover:bg-teal-700 transition">Obtener</button>
+        </form>
+      </div>
+
+      <!-- Actualizar usuario -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Actualizar Usuario</h2>
+        <form id="updateUserForm" class="space-y-4">
+          <input type="text" id="updateUserId" placeholder="ID del usuario" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+          <input type="text" id="updateFirstName" placeholder="Nombre (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <input type="text" id="updateLastName" placeholder="Apellido (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <input type="email" id="updateEmail" placeholder="Email (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <input type="number" id="updateAge" placeholder="Edad (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <input type="password" id="updatePassword" placeholder="Contraseña (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <button type="submit" class="w-full bg-yellow-600 text-white p-3 rounded-lg hover:bg-yellow-700 transition">Actualizar</button>
+        </form>
+      </div>
+
+      <!-- Eliminar usuario -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Eliminar Usuario</h2>
+        <form id="deleteUserForm" class="space-y-4">
+          <input type="text" id="deleteUserId" placeholder="ID del usuario" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+          <button type="submit" class="w-full bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 transition">Eliminar</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sección: Gestión de productos (solo admin) -->
+    <div id="adminSection" class="mb-8 section-hidden">
+      <!-- Crear producto -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Crear Producto</h2>
+        <form id="createProductForm" class="space-y-4">
+          <input type="text" id="productTitle" placeholder="Título" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          <input type="text" id="productDescription" placeholder="Descripción" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          <input type="number" id="productPrice" placeholder="Precio" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          <input type="number" id="productStock" placeholder="Stock" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+          <button type="submit" class="w-full bg-blue-600 text-white p-3 rounded-lg hover:bg-blue-700 transition">Crear Producto</button>
+        </form>
+      </div>
+
+      <!-- Actualizar producto -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Actualizar Producto</h2>
+        <form id="updateProductForm" class="space-y-4">
+          <input type="text" id="updateProductId" placeholder="ID del producto" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500" required>
+          <input type="text" id="updateProductTitle" placeholder="Título (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <input type="text" id="updateProductDescription" placeholder="Descripción (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <input type="number" id="updateProductPrice" placeholder="Precio (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <input type="number" id="updateProductStock" placeholder="Stock (opcional)" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-500">
+          <button type="submit" class="w-full bg-yellow-600 text-white p-3 rounded-lg hover:bg-yellow-700 transition">Actualizar Producto</button>
+        </form>
+      </div>
+
+      <!-- Eliminar producto -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Eliminar Producto</h2>
+        <form id="deleteProductForm" class="space-y-4">
+          <input type="text" id="deleteProductId" placeholder="ID del producto" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" required>
+          <button type="submit" class="w-full bg-red-600 text-white p-3 rounded-lg hover:bg-red-700 transition">Eliminar Producto</button>
+        </form>
+      </div>
+    </div>
+
+    <!-- Sección: Gestión de carrito (solo user) -->
+    <div id="cartSection" class="mb-8 section-hidden">
+      <!-- Agregar al carrito -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Agregar al Carrito</h2>
+        <form id="addToCartForm" class="space-y-4">
+          <input type="text" id="cartProductId" placeholder="ID del producto" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+          <input type="number" id="cartQuantity" placeholder="Cantidad" class="w-full p-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500" required>
+          <button type="submit" class="w-full bg-green-600 text-white p-3 rounded-lg hover:bg-green-700 transition">Agregar al Carrito</button>
+        </form>
+      </div>
+
+      <!-- Realizar compra -->
+      <div class="bg-white p-6 rounded-lg shadow-md mb-6 card">
+        <h2 class="text-xl font-semibold mb-4 text-gray-800">Realizar Compra</h2>
+        <button id="purchaseBtn" class="w-full bg-teal-600 text-white p-3 rounded-lg hover:bg-teal-700 transition">Comprar</button>
+      </div>
     </div>
 
     <!-- Área para mostrar respuestas -->
-    <div class="bg-white p-6 rounded-lg shadow-md">
-      <h2 class="text-xl font-semibold mb-4">Respuesta de la API</h2>
+    <div class="bg-white p-6 rounded-lg shadow-md card">
+      <h2 class="text-xl font-semibold mb-4 text-gray-800">Respuesta de la API</h2>
       <pre id="response" class="response-box text-sm text-gray-800"></pre>
     </div>
   </div>
 
   <script>
-    const baseUrl = 'http://localhost:3000/api/sessions';
+    const baseUrl = 'http://localhost:3000/api';
     const responseEl = document.getElementById('response');
-
-    // Mostrar el token almacenado
-    const updateTokenDisplay = () => {
+    let userRole = null;
+  
+    // Mostrar el token y el rol
+    const updateTokenDisplay = async () => {
       const token = localStorage.getItem('token');
       document.getElementById('token').textContent = token || 'No hay token. Inicia sesión para obtener uno.';
+      if (token) {
+        try {
+          const res = await fetch(`${baseUrl}/sessions/current`, {
+            headers: { 'Authorization': `Bearer ${token}` },
+          });
+          const data = await res.json();
+          if (res.ok) {
+            userRole = data.role;
+            document.getElementById('userRole').textContent = `Rol: ${userRole || 'Ninguno'}`;
+            document.getElementById('adminSection').classList.toggle('section-hidden', userRole !== 'admin');
+            document.getElementById('cartSection').classList.toggle('section-hidden', userRole !== 'user');
+            document.getElementById('userSection').classList.remove('section-hidden');
+          } else {
+            userRole = null;
+            document.getElementById('userRole').textContent = 'Rol: Ninguno';
+            document.getElementById('adminSection').classList.add('section-hidden');
+            document.getElementById('cartSection').classList.add('section-hidden');
+            document.getElementById('userSection').classList.add('section-hidden');
+          }
+        } catch (err) {
+          showResponse({ error: err.message }, true);
+        }
+      } else {
+        document.getElementById('userRole').textContent = 'Rol: Ninguno';
+        document.getElementById('adminSection').classList.add('section-hidden');
+        document.getElementById('cartSection').classList.add('section-hidden');
+        document.getElementById('userSection').classList.add('section-hidden');
+      }
     };
     updateTokenDisplay();
-
+  
     // Función para mostrar respuestas
     const showResponse = (data, error = false) => {
       responseEl.textContent = JSON.stringify(data, null, 2);
       responseEl.classList.remove(error ? 'text-green-600' : 'text-red-600');
       responseEl.classList.add(error ? 'text-red-600' : 'text-green-600');
     };
-
+  
+    // Detectar token en la URL y autocompletar el formulario
+    window.addEventListener('load', () => {
+      const hash = window.location.hash;
+      if (hash.startsWith('#reset-password')) {
+        const urlParams = new URLSearchParams(window.location.search);
+        const token = urlParams.get('token');
+        if (token) {
+          document.getElementById('resetToken').value = token;
+          // Opcional: Desplazar la vista al formulario de restablecimiento
+          document.getElementById('resetPasswordForm').scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
+  
+    // Cerrar sesión
+    document.getElementById('logoutBtn').addEventListener('click', () => {
+      localStorage.removeItem('token');
+      userRole = null;
+      updateTokenDisplay();
+      showResponse({ message: 'Sesión cerrada' });
+    });
+  
     // Registrar usuario
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -130,9 +286,10 @@
         email: document.getElementById('regEmail').value,
         age: parseInt(document.getElementById('regAge').value),
         password: document.getElementById('regPassword').value,
+        role: document.getElementById('regRole').value,
       };
       try {
-        const res = await fetch(`${baseUrl}/register`, {
+        const res = await fetch(`${baseUrl}/sessions/register`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -143,7 +300,7 @@
         showResponse({ error: err.message }, true);
       }
     });
-
+  
     // Iniciar sesión
     document.getElementById('loginForm').addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -152,7 +309,7 @@
         password: document.getElementById('loginPassword').value,
       };
       try {
-        const res = await fetch(`${baseUrl}/login`, {
+        const res = await fetch(`${baseUrl}/sessions/login`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload),
@@ -160,15 +317,52 @@
         const data = await res.json();
         if (res.ok && data.token) {
           localStorage.setItem('token', data.token);
-          updateTokenDisplay();
+          await updateTokenDisplay();
         }
         showResponse(data, !res.ok);
       } catch (err) {
         showResponse({ error: err.message }, true);
       }
     });
-
-    // Obtener usuario actual
+  
+    // Solicitar restablecimiento de contraseña
+    document.getElementById('requestResetForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('resetEmail').value;
+      try {
+        const res = await fetch(`${baseUrl}/sessions/request-password-reset`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  
+    // Restablecer contraseña
+    document.getElementById('resetPasswordForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        token: document.getElementById('resetToken').value,
+        newPassword: document.getElementById('newPassword').value,
+      };
+      try {
+        const res = await fetch(`${baseUrl}/sessions/reset-password`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  
+    // Resto de los eventos (current, getUsers, etc.) permanecen iguales
     document.getElementById('currentBtn').addEventListener('click', async () => {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -176,7 +370,7 @@
         return;
       }
       try {
-        const res = await fetch(`${baseUrl}/current`, {
+        const res = await fetch(`${baseUrl}/sessions/current`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         const data = await res.json();
@@ -185,8 +379,7 @@
         showResponse({ error: err.message }, true);
       }
     });
-
-    // Obtener todos los usuarios
+  
     document.getElementById('getUsersBtn').addEventListener('click', async () => {
       const token = localStorage.getItem('token');
       if (!token) {
@@ -194,7 +387,7 @@
         return;
       }
       try {
-        const res = await fetch(`${baseUrl}/users`, {
+        const res = await fetch(`${baseUrl}/sessions/users`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         const data = await res.json();
@@ -203,8 +396,7 @@
         showResponse({ error: err.message }, true);
       }
     });
-
-    // Obtener usuario por ID
+  
     document.getElementById('getUserByIdForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('getUserId').value;
@@ -214,7 +406,7 @@
         return;
       }
       try {
-        const res = await fetch(`${baseUrl}/users/${id}`, {
+        const res = await fetch(`${baseUrl}/sessions/users/${id}`, {
           headers: { 'Authorization': `Bearer ${token}` },
         });
         const data = await res.json();
@@ -223,8 +415,7 @@
         showResponse({ error: err.message }, true);
       }
     });
-
-    // Actualizar usuario
+  
     document.getElementById('updateUserForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('updateUserId').value;
@@ -240,7 +431,7 @@
         return;
       }
       try {
-        const res = await fetch(`${baseUrl}/users/${id}`, {
+        const res = await fetch(`${baseUrl}/sessions/users/${id}`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -254,8 +445,7 @@
         showResponse({ error: err.message }, true);
       }
     });
-
-    // Eliminar usuario
+  
     document.getElementById('deleteUserForm').addEventListener('submit', async (e) => {
       e.preventDefault();
       const id = document.getElementById('deleteUserId').value;
@@ -265,8 +455,131 @@
         return;
       }
       try {
-        const res = await fetch(`${baseUrl}/users/${id}`, {
+        const res = await fetch(`${baseUrl}/sessions/users/${id}`, {
           method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  
+    document.getElementById('createProductForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        title: document.getElementById('productTitle').value,
+        description: document.getElementById('productDescription').value,
+        price: parseFloat(document.getElementById('productPrice').value),
+        stock: parseInt(document.getElementById('productStock').value),
+      };
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/products`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  
+    document.getElementById('updateProductForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('updateProductId').value;
+      const payload = {};
+      if (document.getElementById('updateProductTitle').value) payload.title = document.getElementById('updateProductTitle').value;
+      if (document.getElementById('updateProductDescription').value) payload.description = document.getElementById('updateProductDescription').value;
+      if (document.getElementById('updateProductPrice').value) payload.price = parseFloat(document.getElementById('updateProductPrice').value);
+      if (document.getElementById('updateProductStock').value) payload.stock = parseInt(document.getElementById('updateProductStock').value);
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/products/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  
+    document.getElementById('deleteProductForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('deleteProductId').value;
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/products/${id}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${token}` },
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  
+    document.getElementById('addToCartForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const payload = {
+        productId: document.getElementById('cartProductId').value,
+        quantity: parseInt(document.getElementById('cartQuantity').value),
+      };
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/carts/add`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify(payload),
+        });
+        const data = await res.json();
+        showResponse(data, !res.ok);
+      } catch (err) {
+        showResponse({ error: err.message }, true);
+      }
+    });
+  
+    document.getElementById('purchaseBtn').addEventListener('click', async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        showResponse({ error: 'No hay token. Inicia sesión primero.' }, true);
+        return;
+      }
+      try {
+        const res = await fetch(`${baseUrl}/carts/purchase`, {
+          method: 'POST',
           headers: { 'Authorization': `Bearer ${token}` },
         });
         const data = await res.json();
